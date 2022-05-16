@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ConverterPdfService } from 'src/utils/services/converter-pdf/converter-pdf.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 declare var require: any
 const FileSaver = require('file-saver');
@@ -11,6 +12,7 @@ const FileSaver = require('file-saver');
 export class HomeComponent implements OnInit {
 
   constructor(
+    private spinner: NgxSpinnerService,
     private _convrterServices: ConverterPdfService
   ) { }
   url: string = 'https://';
@@ -21,20 +23,25 @@ export class HomeComponent implements OnInit {
     this.url = event.target.value;
   }
   async convert() {
-
-    this.result = await this._convrterServices.convert({
-      "Parameters": [
-        {
-          "Name": "Url",
-          "Value": this.url
-        },
-        {
-          "Name": "StoreFile",
-          "Value": true
-        }
-      ]
-    })
-    FileSaver.saveAs(this.result?.Files[0].Url, this.result?.Files[0].FileName);
+    this.spinner.show();
+    try {
+      this.result = await this._convrterServices.convert({
+        "Parameters": [
+          {
+            "Name": "Url",
+            "Value": this.url
+          },
+          {
+            "Name": "StoreFile",
+            "Value": true
+          }
+        ]
+      })
+      FileSaver.saveAs(this.result?.Files[0].Url, this.result?.Files[0].FileName);
+    } catch (err) {
+      console.error(err)
+    }
+    this.spinner.hide()
   }
 
 
