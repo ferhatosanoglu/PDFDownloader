@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: "https://v2.convertapi.com/convert/web/to/"
 };
