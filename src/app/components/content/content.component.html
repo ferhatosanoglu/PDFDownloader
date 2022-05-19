@@ -1,0 +1,25 @@
+<div class="container">
+    <hr class="fw-lighter">
+    <div class="row fw-bold text-primary text-break">
+        <div class="col-md-4">Test / Exam Name: Pdf Test Accountancy 4 </div>
+        <div class="col-md-4">Standard: 12th Commerce </div>
+        <div class="col-md-4"> Subject: Accountancy </div>
+        <div class="col-md-4"> Student Name:_________________________________</div>
+        <div class="col-md-4">Section:_________________________________ </div>
+        <div class="col-md-4"> Roll No:_________________________________</div>
+        <div class="col-12 d-flex justify-content-end">
+            <div class="border b-1 p-1 m-1">Questions: 17</div>
+            <div class="border b-1 p-1 m-1">Time: 60 Mins</div>
+            <div class="border b-1 p-1 m-1">Marks: 179</div>
+        </div>
+    </div>
+    <hr class="fw-lighter">
+    <div class="row">
+        <div class="row my-2" *ngFor="let item of data; index as i">
+            <div class="col-1" [style.font-weight]='fontWeight'>Q{{i+1}}</div>
+            <div class="col-9">{{item.Questions}}</div>
+            <div class="col-2" [style.font-weight]='fontWeight'>{{item.Marks}} Marks </div>
+        </div>
+
+    </div>
+</div>

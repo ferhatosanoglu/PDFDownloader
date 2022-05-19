@@ -8,9 +8,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatModule } from './utils/module/mat.module';
 import { FormsModule } from '@angular/forms';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { ContentComponent } from './components/content/content.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, ContentComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

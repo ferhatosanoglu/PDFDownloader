@@ -1,49 +1,67 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ConverterPdfService } from 'src/utils/services/converter-pdf/converter-pdf.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { jsPDF } from "jspdf";
+import html2canvas from 'html2canvas';
 
-declare var require: any
-const FileSaver = require('file-saver');
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-
+export class HomeComponent {
   constructor(
-    private spinner: NgxSpinnerService,
-    private _convrterServices: ConverterPdfService
-  ) { }
-  url: string = 'https://';
-  result!: any;
-  async ngOnInit() {
+    private spinner: NgxSpinnerService
+  ) {
+
   }
-  handleKeyup(event: any): void {
-    this.url = event.target.value;
+
+  fontData = [
+    "Arial, sans-serif",
+    "Verdana, sans-serif",
+    "Helvetica, sans-serif",
+    "Tahoma, sans-serif",
+    "'Trebuchet MS', sans-serif",
+    "'Times New Roman', serif",
+    "Georgia, serif",
+    "Garamond,serif",
+    "'Courier New', monospace",
+    "'Brush Script MT', cursive"
+  ]
+
+  fontSize: number = 16;
+  fontWeight: string = 'bold'
+  fontFamily: string = "Arial, sans-serif";
+
+  onFontSize(event: any) { // without type info
+    this.fontSize = event.target.value;
   }
-  async convert() {
-    this.spinner.show();
+  selectedFontFamily(newValue: string) {
+    this.fontFamily = newValue;
+  }
+  changeFontWeight(newValue: any) {
+    this.fontWeight = newValue.target.value;
+  }
+  convert() {
+    this.spinner.show()
     try {
-      this.result = await this._convrterServices.convert({
-        "Parameters": [
-          {
-            "Name": "Url",
-            "Value": this.url
-          },
-          {
-            "Name": "StoreFile",
-            "Value": true
-          }
-        ]
-      })
-      FileSaver.saveAs(this.result?.Files[0].Url, this.result?.Files[0].FileName);
+      let data: any = document.getElementById('content');
+
+      html2canvas(data).then(canvas => {
+
+        let docWidth = 208;
+        let docHeight = canvas.height * docWidth / canvas.width;
+
+        const contentDataURL = canvas.toDataURL('image/png')
+        let doc = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+        doc.addImage(contentDataURL, 'PNG', 0, position, docWidth, docHeight)
+
+        doc.save('exportPdf.pdf');
+      });
     } catch (err) {
       console.error(err)
     }
-    this.spinner.hide()
+    this.spinner.hide();
   }
-
-
-
 }
